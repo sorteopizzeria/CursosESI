@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>⚠️ ERROR DE SISTEMA // 08-02-2027</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Fuentes de Google: JetBrains Mono para la terminal, Playfair Display e Inter para la revelación -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,600;0,700;1,500&display=swap" rel="stylesheet">
+  <!-- Librería ligera para generar códigos QR nítidos en Canvas -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+
+  <style>
+    :root {
+      --font-mono: 'JetBrains Mono', monospace;
+      --font-sans: 'Inter', sans-serif;
+      --font-serif: 'Playfair Display', serif;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      background-color: #07090e;
+      color: #e2e8f0;
+      transition: background-color 1.2s ease, color 1.2s ease;
+    }
+
+    /* Estilo Modo Terminal (Pantallas 1 y 2) */
+    .terminal-mode {
+      font-family: var(--font-mono);
+      background-color: #07090e;
+      background-image: 
+        radial-gradient(circle at 50% 30%, rgba(239, 68, 68, 0.08), transparent 60%),
+        linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.35) 50%),
+        linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+      background-size: 100% 100%, 100% 4px, 6px 100%;
+    }
+
+    /* Estilo Modo Noche Estrellada / Plaza Iluminada (Pantalla 3) */
+    .starry-mode {
+      background: radial-gradient(ellipse at top, #1e1b2e 0%, #110f1d 45%, #090810 100%);
+      color: #f8fafc;
+    }
+
+    /* Efecto Glitch sutil en el título de error */
+    .glitch {
+      position: relative;
+      animation: glitch-skew 3s infinite linear alternate-reverse;
+    }
+    .glitch::before,
+    .glitch::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.75;
+    }
+    .glitch::before {
+      color: #ef4444;
+      z-index: -1;
+      animation: glitch-anim-1 2.5s infinite linear alternate-reverse;
+    }
+    .glitch::after {
+      color: #38bdf8;
+      z-index: -2;
+      animation: glitch-anim-2 3s infinite linear alternate-reverse;
+    }
+
+    @keyframes glitch-anim-1 {
+      0% { clip-path: inset(20% 0 60% 0); transform: translate(-2px, 1px); }
+      20% { clip-path: inset(60% 0 10% 0); transform: translate(2px, -1px); }
+      40% { clip-path: inset(40% 0 40% 0); transform: translate(-1px, 2px); }
+      60% { clip-path: inset(80% 0 5% 0); transform: translate(1px, -2px); }
+      80% { clip-path: inset(10% 0 70% 0); transform: translate(-2px, 0); }
+      100% { clip-path: inset(30% 0 50% 0); transform: translate(2px, 1px); }
+    }
+
+    @keyframes glitch-anim-2 {
+      0% { clip-path: inset(15% 0 65% 0); transform: translate(2px, -1px); }
+      25% { clip-path: inset(55% 0 20% 0); transform: translate(-2px, 1px); }
+      50% { clip-path: inset(25% 0 55% 0); transform: translate(1px, 2px); }
+      75% { clip-path: inset(70% 0 15% 0); transform: translate(-1px, -2px); }
+      100% { clip-path: inset(45% 0 35% 0); transform: translate(2px, 0); }
+    }
+
+    @keyframes glitch-skew {
+      0% { transform: skew(0deg); }
+      20% { transform: skew(0deg); }
+      21% { transform: skew(1.5deg); }
+      22% { transform: skew(-1.5deg); }
+      23% { transform: skew(0deg); }
+      100% { transform: skew(0deg); }
+    }
+
+    /* Línea de escaneo animada */
+    .scanline {
+      width: 100%;
+      height: 80px;
+      z-index: 10;
+      background: linear-gradient(0deg, rgba(0,0,0,0) 0%, rgba(239, 68, 68, 0.08) 50%, rgba(0,0,0,0) 100%);
+      opacity: 0.6;
+      position: fixed;
+      bottom: 100%;
+      pointer-events: none;
+      animation: scanline 7s linear infinite;
+    }
+
+    @keyframes scanline {
+      0% { bottom: 100%; }
+      100% { bottom: -100px; }
+    }
+
+    /* Botón pulsante de diagnóstico */
+    .pulse-btn {
+      box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.65);
+      animation: pulse-red 2s infinite;
+    }
+
+    @keyframes pulse-red {
+      0% { transform: scale(0.99); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+      70% { transform: scale(1.01); box-shadow: 0 0 0 14px rgba(239, 68, 68, 0); }
+      100% { transform: scale(0.99); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+    }
+
+    /* Destello cálido de transición */
+    #warm-flash {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle, #fffbeb 0%, #fcd34d 45%, #f59e0b 100%);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 50;
+      transition: opacity 0.7s ease-in-out;
+    }
+
+    /* Tarjeta Holográfica 3D para los Pases */
+    .ticket-perspective {
+      perspective: 1200px;
+    }
+
+    .ticket-card {
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.15s ease-out, box-shadow 0.3s ease;
+      background: linear-gradient(135deg, #fffdf9 0%, #fef6e8 100%);
+      color: #1e293b;
+      border-radius: 1.25rem;
+      overflow: hidden;
+      box-shadow: 0 20px 45px -15px rgba(0, 0, 0, 0.65), 0 0 25px rgba(251, 191, 36, 0.18);
+    }
+
+    /* Reflejo holográfico dinámico */
+    .ticket-glare {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(
+        circle at var(--glare-x, 50%) var(--glare-y, 50%),
+        rgba(255, 255, 255, 0.65) 0%,
+        rgba(253, 224, 71, 0.22) 30%,
+        rgba(249, 115, 22, 0.08) 55%,
+        transparent 80%
+      );
+      mix-blend-mode: overlay;
+      opacity: var(--glare-opacity, 0);
+      transition: opacity 0.3s ease;
+      z-index: 20;
+    }
+
+    /* Muescas laterales estilo ticket físico perforado */
+    .ticket-notch-left,
+    .ticket-notch-right {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      background-color: #131120;
+      border-radius: 9999px;
+      top: 63%;
+      transform: translateY(-50%);
+      z-index: 15;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);
+    }
+    .ticket-notch-left { left: -12px; }
+    .ticket-notch-right { right: -12px; }
+
+    /* Estrellas de fondo en pantalla final */
+    .stars-bg {
+      background-image: 
+        radial-gradient(1.5px 1.5px at 20px 30px, #fef08a, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 90px 40px, #ffffff, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 160px 120px, #fde047, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 230px 80px, #ffffff, rgba(0,0,0,0)),
+        radial-gradient(1.5px 1.5px at 310px 150px, #fed7aa, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 400px 50px, #ffffff, rgba(0,0,0,0));
+      background-repeat: repeat;
+      background-size: 450px 220px;
+      animation: twinkle 8s ease-in-out infinite alternate;
+    }
+
+    @keyframes twinkle {
+      0% { opacity: 0.45; }
+      100% { opacity: 0.95; }
+    }
+
+    .font-serif-title {
+      font-family: var(--font-serif);
+    }
+  </style>
+</head>
+<body class="terminal-mode min-h-screen flex flex-col justify-between selection:bg-amber-400 selection:text-slate-900">
+
+  <!-- Efectos atmosféricos -->
+  <div id="scanline-effect" class="scanline"></div>
+  <div id="warm-flash"></div>
+  <canvas id="confetti-canvas" class="fixed inset-0 pointer-events-none z-40"></canvas>
+
+  <!-- ===================================================================== -->
+  <!-- PANTALLA 1: FALSO ERROR CRÍTICO DEL SISTEMA                           -->
+  <!-- ===================================================================== -->
+  <main id="screen-error" class="flex-1 flex items-center justify-center p-4 sm:p-6 transition-opacity duration-500">
+    <div class="w-full max-w-2xl bg-slate-950/90 border border-red-500/40 rounded-2xl p-6 sm:p-10 shadow-[0_0_50px_rgba(239,68,68,0.15)] backdrop-blur-md relative overflow-hidden">
+      
+      <!-- Barra superior estilo ventana de consola -->
+      <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
+        <div class="flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
+          <span class="w-3 h-3 rounded-full bg-amber-500 inline-block"></span>
+          <span class="w-3 h-3 rounded-full bg-emerald-500/40 inline-block"></span>
+          <span class="text-xs text-slate-500 ml-2">sys_kernel_audio.log</span>
+        </div>
+        <span class="text-xs px-2.5 py-1 rounded-full bg-red-500/10 text-red-400 border border-red-500/30 font-semibold">
+          STATUS: HALTED
+        </span>
+      </div>
+
+      <!-- Encabezado de alerta -->
+      <div class="mb-6">
+        <p class="text-xs sm:text-sm text-red-400 tracking-widest uppercase mb-2 font-semibold">
+          [ INTERRUPCIÓN DEL SISTEMA DETECTADA ]
+        </p>
+        <h1 class="glitch text-xl sm:text-3xl font-bold text-red-500 leading-tight" data-text="⚠️ ERROR CRÍTICO DE SISTEMA // CÓDIGO 08-02-2027">
+          ⚠️ ERROR CRÍTICO DE SISTEMA // CÓDIGO 08-02-2027
+        </h1>
+      </div>
+
+      <!-- Mensaje principal destacado -->
+      <div class="bg-red-950/30 border-l-4 border-red-500 rounded-r-xl p-5 sm:p-6 mb-6 shadow-inner">
+        <p class="text-xs text-red-300/70 uppercase tracking-wider mb-2">
+          > MENSAJE INTERCEPTADO EN MEMORIA:
+        </p>
+        <blockquote class="text-lg sm:text-2xl font-bold text-amber-100 leading-snug italic">
+          “No escuches este álbum nuevo que saco, porque de seguro que no te va a gustar Mati”
+        </blockquote>
+      </div>
+
+      <!-- Subtexto de diagnóstico -->
+      <div class="space-y-2 text-xs sm:text-sm text-slate-300 mb-8 bg-slate-900/70 p-4 rounded-xl border border-slate-800">
+        <p class="text-red-400 font-semibold">> DIAGNÓSTICO PRELIMINAR:</p>
+        <p class="leading-relaxed text-slate-300">
+          Se ha detectado una anomalía emocional de alta frecuencia. El sistema ha bloqueado la reproducción estándar por exceso de expectativa.
+        </p>
+        <p class="text-slate-500 text-xs pt-1">
+          Ubicación del conflicto: Sector Río de la Plata // Nodo Colonia.
+        </p>
+      </div>
+
+      <!-- Botón interactivo pulsante -->
+      <div class="flex flex-col items-center">
+        <button 
+          id="btn-start-diagnostic"
+          class="pulse-btn w-full sm:w-auto px-6 sm:px-8 py-4 rounded-xl bg-red-600 hover:bg-red-500 active:scale-95 text-white font-bold text-sm sm:text-base tracking-wider transition-all cursor-pointer border border-red-400/50 shadow-lg"
+        >
+          [ EJECUTAR DIAGNÓSTICO Y REPARAR ]
+        </button>
+        <span class="text-[11px] text-slate-500 mt-3">
+          Presiona para iniciar escaneo profundo de frecuencias
+        </span>
+      </div>
+    </div>
+  </main>
+
+  <!-- ===================================================================== -->
+  <!-- PANTALLA 2: DIAGNÓSTICO Y CARGA INTERACTIVA                           -->
+  <!-- ===================================================================== -->
+  <section id="screen-diagnostic" class="hidden flex-1 flex items-center justify-center p-4 sm:p-6">
+    <div class="w-full max-w-2xl bg-slate-950/95 border border-amber-500/30 rounded-2xl p-6 sm:p-10 shadow-[0_0_60px_rgba(245,158,11,0.12)] backdrop-blur-md">
+      
+      <div class="flex items-center justify-between mb-4">
+        <span class="text-xs sm:text-sm text-amber-400 font-semibold tracking-wider uppercase">
+          > EJECUTANDO PROTOCOLO DE REPARACIÓN...
+        </span>
+        <span id="progress-percent" class="text-sm sm:text-base font-bold text-amber-300">0%</span>
+      </div>
+
+      <!-- Barra de progreso -->
+      <div class="w-full h-3.5 bg-slate-900 rounded-full overflow-hidden border border-slate-800 mb-6 p-0.5">
+        <div id="progress-bar" class="h-full w-0 rounded-full bg-gradient-to-r from-red-500 via-amber-400 to-emerald-400 transition-all duration-300"></div>
+      </div>
+
+      <!-- Consola de logs línea por línea -->
+      <div id="terminal-logs" class="bg-black/60 border border-slate-800/90 rounded-xl p-4 sm:p-5 min-h-[250px] sm:min-h-[270px] space-y-3 text-xs sm:text-sm leading-relaxed overflow-y-auto">
+        <!-- Las líneas se inyectan dinámicamente vía JS -->
+      </div>
+
+      <div class="mt-5 flex items-center justify-between text-xs text-slate-500">
+        <span>Kernel: DrexlerOS v2027.02</span>
+        <span class="animate-pulse text-amber-400/80">Calibrando acústica...</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- PANTALLA 3: LA GRAN REVELACIÓN + PASES VIP INTERACTIVOS               -->
+  <!-- ===================================================================== -->
+  <section id="screen-reveal" class="hidden flex-1 relative stars-bg py-8 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-5xl mx-auto">
+
+      <!-- Encabezado Emotivo -->
+      <header class="text-center max-w-3xl mx-auto mb-8 sm:mb-10">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/15 border border-amber-400/30 text-amber-300 text-xs sm:text-sm font-medium mb-4 shadow-sm">
+          <span>✨ DIAGNÓSTICO COMPLETADO CON ÉXITO</span>
+        </div>
+        <h1 class="font-serif-title text-2xl sm:text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-100 to-amber-300 leading-tight mb-4">
+          ✨ SISTEMA REPARADO: NOS VAMOS A VER A JORGE DREXLER ✨
+        </h1>
+        <p class="text-base sm:text-xl text-amber-100/90 font-light italic leading-relaxed bg-white/5 border border-amber-300/15 rounded-2xl p-4 sm:p-5 backdrop-blur-sm">
+          “¿Cómo se ama?” — <span class="font-normal not-italic text-amber-200">Respuesta encontrada: cantando juntos bajo las estrellas en Colonia.</span>
+        </p>
+      </header>
+
+      <!-- Cuenta Regresiva en Tiempo Real -->
+      <div class="max-w-2xl mx-auto mb-10">
+        <p class="text-center text-xs uppercase tracking-[0.2em] text-amber-300/80 mb-3 font-semibold">
+          Cuenta regresiva para el Lunes 8 de Febrero de 2027 • 21:00 hs (UY)
+        </p>
+        <div class="grid grid-cols-4 gap-2 sm:gap-4 text-center">
+          <div class="bg-white/5 border border-amber-400/20 rounded-2xl p-3 sm:p-4 backdrop-blur-md">
+            <span id="cd-days" class="block text-2xl sm:text-4xl font-bold text-amber-200">000</span>
+            <span class="text-[11px] sm:text-xs text-slate-400 uppercase tracking-wider">Días</span>
+          </div>
+          <div class="bg-white/5 border border-amber-400/20 rounded-2xl p-3 sm:p-4 backdrop-blur-md">
+            <span id="cd-hours" class="block text-2xl sm:text-4xl font-bold text-amber-200">00</span>
+            <span class="text-[11px] sm:text-xs text-slate-400 uppercase tracking-wider">Horas</span>
+          </div>
+          <div class="bg-white/5 border border-amber-400/20 rounded-2xl p-3 sm:p-4 backdrop-blur-md">
+            <span id="cd-minutes" class="block text-2xl sm:text-4xl font-bold text-amber-200">00</span>
+            <span class="text-[11px] sm:text-xs text-slate-400 uppercase tracking-wider">Minutos</span>
+          </div>
+          <div class="bg-white/5 border border-amber-400/20 rounded-2xl p-3 sm:p-4 backdrop-blur-md">
+            <span id="cd-seconds" class="block text-2xl sm:text-4xl font-bold text-amber-300">00</span>
+            <span class="text-[11px] sm:text-xs text-slate-400 uppercase tracking-wider">Segundos</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Selector móvil / Filtro rápido de pases -->
+      <div class="flex flex-wrap items-center justify-center gap-2 mb-6">
+        <button onclick="filterPasses('all')" id="tab-all" class="px-4 py-2 rounded-full text-xs sm:text-sm font-semibold bg-amber-400 text-slate-950 shadow transition cursor-pointer">
+          Ver Ambos Pases (2)
+        </button>
+        <button onclick="filterPasses('pass1')" id="tab-pass1" class="px-4 py-2 rounded-full text-xs sm:text-sm font-medium bg-white/10 text-amber-100 hover:bg-white/20 transition cursor-pointer">
+          Pase 1 • Belén
+        </button>
+        <button onclick="filterPasses('pass2')" id="tab-pass2" class="px-4 py-2 rounded-full text-xs sm:text-sm font-medium bg-white/10 text-amber-100 hover:bg-white/20 transition cursor-pointer">
+          Pase 2 • Matías
+        </button>
+      </div>
+
+      <!-- Contenedor de los DOS PASES REALES estilo RedTickets Coleccionable -->
+      <div id="passes-grid" class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 items-stretch mb-10">
+        
+        <!-- ==================== PASE 1 (1 de 2) ==================== -->
+        <div id="card-pass1" class="ticket-perspective">
+          <div class="ticket-card h-full flex flex-col justify-between border border-amber-200/60" data-tilt>
+            <div class="ticket-glare"></div>
+            <div class="ticket-notch-left"></div>
+            <div class="ticket-notch-right"></div>
+
+            <!-- Cabecera estilo RedTickets -->
+            <div class="p-6 sm:p-7 pb-4">
+              <div class="flex items-center justify-between mb-5">
+                <div class="flex items-center gap-1.5">
+                  <span class="text-2xl font-extrabold tracking-tight text-[#ff5a00]">Red</span>
+                  <svg class="w-6 h-6 text-[#ff5a00] fill-current" viewBox="0 0 24 24">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                  </svg>
+                  <span class="text-2xl font-extrabold tracking-tight text-[#ff5a00]">Tickets</span>
+                </div>
+                <span class="px-3 py-1 rounded-full bg-orange-100 text-[#ff5a00] text-xs font-bold tracking-wide">
+                  PASE 1 DE 2
+                </span>
+              </div>
+
+              <!-- Info principal + QR -->
+              <div class="flex flex-col sm:flex-row gap-5 items-center sm:items-start">
+                <!-- Código QR interactivo -->
+                <div class="flex flex-col items-center shrink-0">
+                  <div class="bg-white p-2.5 rounded-xl border-2 border-slate-200 shadow-sm relative group">
+                    <canvas id="qr-pass-1" class="w-32 h-32 block"></canvas>
+                    <img id="img-pass-1" class="hidden w-32 h-32 object-contain rounded" alt="QR Pase 1" />
+                    <button 
+                      onclick="openQrModal(1)" 
+                      class="mt-2 w-full text-[11px] font-semibold text-slate-600 hover:text-[#ff5a00] flex items-center justify-center gap-1 py-1 rounded bg-slate-100 hover:bg-orange-50 transition cursor-pointer"
+                    >
+                      🔍 Ampliar QR
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Datos del evento y titular -->
+                <div class="flex-1 text-center sm:text-left space-y-2">
+                  <h2 class="text-lg sm:text-xl font-bold text-slate-900 leading-snug">
+                    Jorge Drexler – Taracá en Plaza de Toros
+                  </h2>
+                  <div class="inline-block px-2.5 py-0.5 rounded-md bg-amber-100/80 text-amber-900 text-xs font-semibold">
+                    Campo General de Pie
+                  </div>
+                  <div class="text-sm text-slate-700 pt-1">
+                    <p class="font-semibold text-slate-900">Lunes 8 de Febrero de 2027</p>
+                    <p class="text-slate-600">21:00 hs</p>
+                  </div>
+                  <div class="pt-2 border-t border-slate-200/80">
+                    <p class="text-[11px] uppercase tracking-wider text-slate-400 font-semibold">Titular del Pase</p>
+                    <p class="text-sm sm:text-base font-extrabold text-slate-900 tracking-wide">
+                      BELEN MACHADO FLEURY
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Línea divisoria perforada -->
+            <div class="px-6 my-2">
+              <div class="border-t-2 border-dashed border-[#ff5a00]/40"></div>
+            </div>
+
+            <!-- Pie del Ticket con detalles oficiales -->
+            <div class="p-6 sm:p-7 pt-3 bg-amber-50/50 text-xs text-slate-600 space-y-3">
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <p class="font-bold text-slate-800">Lugar</p>
+                  <p>Plaza de Toros Real de San Carlos</p>
+                  <p class="text-slate-500">Colonia del Sacramento</p>
+                </div>
+                <div class="text-right">
+                  <p class="font-bold text-slate-800">Datos de compra</p>
+                  <p class="font-mono font-semibold text-slate-800">8182342 • 1 de 2</p>
+                  <p class="text-slate-500 truncate">beluuufleury19@gmail.com</p>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between pt-2 border-t border-slate-200/70">
+                <span class="text-[11px] text-slate-500">Productor: Plaza de Toros • $ 1860</span>
+                <label class="text-[11px] text-[#ff5a00] hover:underline font-semibold cursor-pointer">
+                  📎 Adjuntar captura original
+                  <input type="file" accept="image/*" class="hidden" onchange="handleCustomTicketImage(event, 1)" />
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== PASE 2 (2 de 2) ==================== -->
+        <div id="card-pass2" class="ticket-perspective">
+          <div class="ticket-card h-full flex flex-col justify-between border border-amber-200/60" data-tilt>
+            <div class="ticket-glare"></div>
+            <div class="ticket-notch-left"></div>
+            <div class="ticket-notch-right"></div>
+
+            <!-- Cabecera estilo RedTickets -->
+            <div class="p-6 sm:p-7 pb-4">
+              <div class="flex items-center justify-between mb-5">
+                <div class="flex items-center gap-1.5">
+                  <span class="text-2xl font-extrabold tracking-tight text-[#ff5a00]">Red</span>
+                  <svg class="w-6 h-6 text-[#ff5a00] fill-current" viewBox="0 0 24 24">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                  </svg>
+                  <span class="text-2xl font-extrabold tracking-tight text-[#ff5a00]">Tickets</span>
+                </div>
+                <span class="px-3 py-1 rounded-full bg-orange-100 text-[#ff5a00] text-xs font-bold tracking-wide">
+                  PASE 2 DE 2
+                </span>
+              </div>
+
+              <!-- Info principal + QR -->
+              <div class="flex flex-col sm:flex-row gap-5 items-center sm:items-start">
+                <!-- Código QR interactivo -->
+                <div class="flex flex-col items-center shrink-0">
+                  <div class="bg-white p-2.5 rounded-xl border-2 border-slate-200 shadow-sm relative group">
+                    <canvas id="qr-pass-2" class="w-32 h-32 block"></canvas>
+                    <img id="img-pass-2" class="hidden w-32 h-32 object-contain rounded" alt="QR Pase 2" />
+                    <button 
+                      onclick="openQrModal(2)" 
+                      class="mt-2 w-full text-[11px] font-semibold text-slate-600 hover:text-[#ff5a00] flex items-center justify-center gap-1 py-1 rounded bg-slate-100 hover:bg-orange-50 transition cursor-pointer"
+                    >
+                      🔍 Ampliar QR
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Datos del evento y titular -->
+                <div class="flex-1 text-center sm:text-left space-y-2">
+                  <h2 class="text-lg sm:text-xl font-bold text-slate-900 leading-snug">
+                    Jorge Drexler – Taracá en Plaza de Toros
+                  </h2>
+                  <div class="inline-block px-2.5 py-0.5 rounded-md bg-amber-100/80 text-amber-900 text-xs font-semibold">
+                    Campo General de Pie
+                  </div>
+                  <div class="text-sm text-slate-700 pt-1">
+                    <p class="font-semibold text-slate-900">Lunes 8 de Febrero de 2027</p>
+                    <p class="text-slate-600">21:00 hs</p>
+                  </div>
+                  <div class="pt-2 border-t border-slate-200/80">
+                    <p class="text-[11px] uppercase tracking-wider text-slate-400 font-semibold">Titular del Pase</p>
+                    <p class="text-sm sm:text-base font-extrabold text-slate-900 tracking-wide">
+                      MATIAS NICOLAS BARRETO PAZ
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Línea divisoria perforada -->
+            <div class="px-6 my-2">
+              <div class="border-t-2 border-dashed border-[#ff5a00]/40"></div>
+            </div>
+
+            <!-- Pie del Ticket con detalles oficiales -->
+            <div class="p-6 sm:p-7 pt-3 bg-amber-50/50 text-xs text-slate-600 space-y-3">
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <p class="font-bold text-slate-800">Lugar</p>
+                  <p>Plaza de Toros Real de San Carlos</p>
+                  <p class="text-slate-500">Colonia del Sacramento</p>
+                </div>
+                <div class="text-right">
+                  <p class="font-bold text-slate-800">Datos de compra</p>
+                  <p class="font-mono font-semibold text-slate-800">8182342 • 2 de 2</p>
+                  <p class="text-slate-500 truncate">matibarreto26@gmail.com</p>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between pt-2 border-t border-slate-200/70">
+                <span class="text-[11px] text-slate-500">Productor: Plaza de Toros • $ 1860</span>
+                <label class="text-[11px] text-[#ff5a00] hover:underline font-semibold cursor-pointer">
+                  📎 Adjuntar captura original
+                  <input type="file" accept="image/*" class="hidden" onchange="handleCustomTicketImage(event, 2)" />
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Botones de acción inferiores -->
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pb-8">
+        <button 
+          onclick="launchConfetti()" 
+          class="w-full sm:w-auto px-6 py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-sm shadow-lg shadow-amber-500/20 transition cursor-pointer"
+        >
+          ✨ Celebrar de nuevo
+        </button>
+        <button 
+          onclick="resetExperience()" 
+          class="w-full sm:w-auto px-6 py-3 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-amber-100 font-medium text-sm transition cursor-pointer"
+        >
+          ↺ Repetir animación desde cero
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL PARA AMPLIAR QR O CAPTURA DE ENTRADA                            -->
+  <!-- ===================================================================== -->
+  <div id="qr-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4" onclick="closeQrModal(event)">
+    <div class="bg-white text-slate-900 rounded-2xl max-w-sm w-full p-6 text-center shadow-2xl relative" onclick="event.stopPropagation()">
+      <button onclick="closeQrModal()" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold cursor-pointer">
+        ✕
+      </button>
+      <p class="text-xs font-bold uppercase tracking-wider text-[#ff5a00] mb-1" id="modal-pass-badge">PASE 1 DE 2</p>
+      <h3 class="text-lg font-extrabold text-slate-900 mb-1" id="modal-pass-holder">BELEN MACHADO FLEURY</h3>
+      <p class="text-xs text-slate-500 mb-4">Jorge Drexler – Taracá en Plaza de Toros</p>
+      
+      <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-center mb-4">
+        <canvas id="modal-qr-canvas" class="w-56 h-56"></canvas>
+        <img id="modal-qr-img" class="hidden max-h-64 w-auto object-contain rounded" alt="Captura ampliada" />
+      </div>
+
+      <p class="text-xs font-mono text-slate-600 mb-4" id="modal-pass-code">Compra #8182342 • Campo General de Pie</p>
+      <button onclick="downloadActiveQr()" class="w-full py-2.5 rounded-xl bg-[#ff5a00] hover:bg-orange-600 text-white font-bold text-sm transition cursor-pointer">
+        ⬇️ Guardar imagen del pase
+      </button>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- LÓGICA DE AUDIO SINTETIZADO, DIAGNÓSTICO, QR 3D Y CONFETI             -->
+  <!-- ===================================================================== -->
+  <script>
+    // Estado global de la aplicación
+    let diagnosticTimers = [];
+    let countdownInterval = null;
+    let currentModalPass = 1;
+    const customImages = { 1: null, 2: null };
+
+    // Datos estructurados de ambos pases reales
+    const passesData = {
+      1: {
+        badge: "PASE 1 DE 2",
+        holder: "BELEN MACHADO FLEURY",
+        code: "8182342-1-DE-2 | REDTICKETS | JORGE DREXLER TARACA | 08-02-2027 21:00 | PLAZA DE TOROS COLONIA",
+        footer: "Compra #8182342 (1 de 2) • Campo General de Pie"
+      },
+      2: {
+        badge: "PASE 2 DE 2",
+        holder: "MATIAS NICOLAS BARRETO PAZ",
+        code: "8182342-2-DE-2 | REDTICKETS | JORGE DREXLER TARACA | 08-02-2027 21:00 | PLAZA DE TOROS COLONIA",
+        footer: "Compra #8182342 (2 de 2) • Campo General de Pie"
+      }
+    };
+
+    // -----------------------------------------------------------------------
+    // 1. SINTETIZADOR DE SONIDO SUAVE (Web Audio API - sin archivos externos)
+    // -----------------------------------------------------------------------
+    let audioCtx = null;
+
+    function initAudio() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContext();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function playSoftClickSound() {
+      try {
+        initAudio();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(520, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(780, audioCtx.currentTime + 0.12);
+
+        gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.14);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.15);
+      } catch (e) {
+        // Ignorar si el navegador bloquea audio
+      }
+    }
+
+    function playLogStepBeep(stepIndex) {
+      try {
+        initAudio();
+        const notes = [330, 392, 440, 493.88, 587.33]; // Acorde cálido ascendente
+        const freq = notes[stepIndex % notes.length];
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+        gain.gain.setValueAtTime(0.07, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.22);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.24);
+      } catch (e) {}
+    }
+
+    function playRevealChord() {
+      try {
+        initAudio();
+        // Acorde mayor cálido (Do - Mi - Sol - Si - Re)
+        const chord = [261.63, 329.63, 392.00, 493.88, 587.33];
+        chord.forEach((freq, idx) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, audioCtx.currentTime + idx * 0.06);
+
+          gain.gain.setValueAtTime(0.001, audioCtx.currentTime + idx * 0.06);
+          gain.gain.linearRampToValueAtTime(0.08, audioCtx.currentTime + idx * 0.06 + 0.15);
+          gain.gain.exponentialRampToValueAtTime(0.0008, audioCtx.currentTime + 2.2);
+
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(audioCtx.currentTime + idx * 0.06);
+          osc.stop(audioCtx.currentTime + 2.3);
+        });
+      } catch (e) {}
+    }
+
+    // -----------------------------------------------------------------------
+    // 2. FLUJO DE PANTALLAS Y DIAGNÓSTICO PASO A PASO
+    // -----------------------------------------------------------------------
+    const logSteps = [
+      {
+        pct: 18,
+        delay: 500,
+        tag: "[OK]",
+        tagColor: "text-emerald-400",
+        text: "Analizando coordenadas geográficas: 34°26′31″S 57°51′06″O (Colonia del Sacramento)..."
+      },
+      {
+        pct: 38,
+        delay: 1900,
+        tag: "[OK]",
+        tagColor: "text-emerald-400",
+        text: "Calibrando acústica en Plaza de Toros Real de San Carlos..."
+      },
+      {
+        pct: 62,
+        delay: 3500,
+        tag: "[ALERTA]",
+        tagColor: "text-amber-400",
+        text: 'Se detecta pregunta sin resolver en el núcleo: "¿Cómo se ama?"...'
+      },
+      {
+        pct: 84,
+        delay: 5200,
+        tag: "[PROCESANDO]",
+        tagColor: "text-sky-400",
+        text: "Sincronizando latidos para el Lunes 8 de Febrero de 2027 - 21:00 hs..."
+      },
+      {
+        pct: 100,
+        delay: 6900,
+        tag: "[ÉXITO]",
+        tagColor: "text-emerald-300 font-bold",
+        text: 'Parche aplicado: "Taracá" en vivo desbloqueado.'
+      }
+    ];
+
+    document.getElementById('btn-start-diagnostic').addEventListener('click', startDiagnostic);
+
+    function startDiagnostic() {
+      playSoftClickSound();
+
+      const screenError = document.getElementById('screen-error');
+      const screenDiagnostic = document.getElementById('screen-diagnostic');
+      const logsContainer = document.getElementById('terminal-logs');
+      const progressBar = document.getElementById('progress-bar');
+      const progressPercent = document.getElementById('progress-percent');
+
+      // Limpiar estado previo
+      logsContainer.innerHTML = '';
+      progressBar.style.width = '0%';
+      progressPercent.textContent = '0%';
+
+      screenError.classList.add('hidden');
+      screenDiagnostic.classList.remove('hidden');
+
+      logSteps.forEach((step, index) => {
+        const timer = setTimeout(() => {
+          playLogStepBeep(index);
+          progressBar.style.width = step.pct + '%';
+          progressPercent.textContent = step.pct + '%';
+
+          const lineEl = document.createElement('div');
+          lineEl.className = 'opacity-0 translate-y-1 transition-all duration-300 flex items-start gap-2';
+          lineEl.innerHTML = `
+            <span class="${step.tagColor} shrink-0 font-bold">${step.tag}</span>
+            <span class="text-slate-200">${step.text}</span>
+          `;
+          logsContainer.appendChild(lineEl);
+
+          // Animación de entrada suave
+          requestAnimationFrame(() => {
+            lineEl.classList.remove('opacity-0', 'translate-y-1');
+          });
+
+          // Al completar el 100%, disparar destello cálido y revelación
+          if (step.pct === 100) {
+            const revealTimer = setTimeout(() => {
+              triggerWarmReveal();
+            }, 1300);
+            diagnosticTimers.push(revealTimer);
+          }
+        }, step.delay);
+
+        diagnosticTimers.push(timer);
+      });
+    }
+
+    function triggerWarmReveal() {
+      const flash = document.getElementById('warm-flash');
+      flash.style.opacity = '0.95';
+      playRevealChord();
+
+      setTimeout(() => {
+        // Cambiar tema de terminal a noche estrellada
+        document.body.classList.remove('terminal-mode');
+        document.body.classList.add('starry-mode');
+        document.getElementById('scanline-effect').style.display = 'none';
+
+        document.getElementById('screen-diagnostic').classList.add('hidden');
+        document.getElementById('screen-reveal').classList.remove('hidden');
+
+        // Generar QRs en los canvas
+        renderAllQRs();
+        // Iniciar cuenta regresiva
+        startCountdown();
+        // Lanzar chispas doradas
+        launchConfetti();
+
+        // Desvanecer destello
+        flash.style.opacity = '0';
+      }, 650);
+    }
+
+    function resetExperience() {
+      playSoftClickSound();
+      diagnosticTimers.forEach(t => clearTimeout(t));
+      diagnosticTimers = [];
+
+      document.body.classList.remove('starry-mode');
+      document.body.classList.add('terminal-mode');
+      document.getElementById('scanline-effect').style.display = 'block';
+
+      document.getElementById('screen-reveal').classList.add('hidden');
+      document.getElementById('screen-diagnostic').classList.add('hidden');
+      document.getElementById('screen-error').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // -----------------------------------------------------------------------
+    // 3. GENERACIÓN DE CÓDIGOS QR Y GESTIÓN DE CAPTURAS
+    // -----------------------------------------------------------------------
+    function renderAllQRs() {
+      [1, 2].forEach(num => {
+        const canvas = document.getElementById(`qr-pass-${num}`);
+        if (canvas && window.QRious) {
+          new QRious({
+            element: canvas,
+            value: passesData[num].code,
+            size: 220,
+            level: 'H',
+            foreground: '#0f172a',
+            background: '#ffffff'
+          });
+        }
+      });
+    }
+
+    function handleCustomTicketImage(event, passNum) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        customImages[passNum] = e.target.result;
+        const canvas = document.getElementById(`qr-pass-${passNum}`);
+        const img = document.getElementById(`img-pass-${passNum}`);
+        canvas.classList.add('hidden');
+        img.src = e.target.result;
+        img.classList.remove('hidden');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function openQrModal(passNum) {
+      currentModalPass = passNum;
+      const modal = document.getElementById('qr-modal');
+      const data = passesData[passNum];
+
+      document.getElementById('modal-pass-badge').textContent = data.badge;
+      document.getElementById('modal-pass-holder').textContent = data.holder;
+      document.getElementById('modal-pass-code').textContent = data.footer;
+
+      const modalCanvas = document.getElementById('modal-qr-canvas');
+      const modalImg = document.getElementById('modal-qr-img');
+
+      if (customImages[passNum]) {
+        modalCanvas.classList.add('hidden');
+        modalImg.src = customImages[passNum];
+        modalImg.classList.remove('hidden');
+      } else {
+        modalImg.classList.add('hidden');
+        modalCanvas.classList.remove('hidden');
+        if (window.QRious) {
+          new QRious({
+            element: modalCanvas,
+            value: data.code,
+            size: 320,
+            level: 'H',
+            foreground: '#0f172a',
+            background: '#ffffff'
+          });
+        }
+      }
+
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeQrModal(event) {
+      const modal = document.getElementById('qr-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function downloadActiveQr() {
+      const link = document.createElement('a');
+      const fileName = `Entrada_Drexler_Colonia_Pase_${currentModalPass}.png`;
+      if (customImages[currentModalPass]) {
+        link.href = customImages[currentModalPass];
+      } else {
+        const canvas = document.getElementById('modal-qr-canvas');
+        link.href = canvas.toDataURL('image/png');
+      }
+      link.download = fileName;
+      link.click();
+    }
+
+    // Filtro para alternar vista de pases
+    function filterPasses(mode) {
+      const card1 = document.getElementById('card-pass1');
+      const card2 = document.getElementById('card-pass2');
+      const grid = document.getElementById('passes-grid');
+
+      const tabs = ['tab-all', 'tab-pass1', 'tab-pass2'];
+      tabs.forEach(id => {
+        const el = document.getElementById(id);
+        el.className = "px-4 py-2 rounded-full text-xs sm:text-sm font-medium bg-white/10 text-amber-100 hover:bg-white/20 transition cursor-pointer";
+      });
+
+      if (mode === 'all') {
+        document.getElementById('tab-all').className = "px-4 py-2 rounded-full text-xs sm:text-sm font-semibold bg-amber-400 text-slate-950 shadow transition cursor-pointer";
+        card1.classList.remove('hidden');
+        card2.classList.remove('hidden');
+        grid.className = "grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 items-stretch mb-10";
+      } else if (mode === 'pass1') {
+        document.getElementById('tab-pass1').className = "px-4 py-2 rounded-full text-xs sm:text-sm font-semibold bg-amber-400 text-slate-950 shadow transition cursor-pointer";
+        card1.classList.remove('hidden');
+        card2.classList.add('hidden');
+        grid.className = "max-w-xl mx-auto mb-10";
+      } else if (mode === 'pass2') {
+        document.getElementById('tab-pass2').className = "px-4 py-2 rounded-full text-xs sm:text-sm font-semibold bg-amber-400 text-slate-950 shadow transition cursor-pointer";
+        card1.classList.add('hidden');
+        card2.classList.remove('hidden');
+        grid.className = "max-w-xl mx-auto mb-10";
+      }
+    }
+
+    // -----------------------------------------------------------------------
+    // 4. CUENTA REGRESIVA EN TIEMPO REAL (8 de Febrero 2027, 21:00 UTC-3)
+    // -----------------------------------------------------------------------
+    function startCountdown() {
+      if (countdownInterval) clearInterval(countdownInterval);
+
+      // Fecha objetivo en horario de Uruguay (UTC-3)
+      const targetDate = new Date('2027-02-08T21:00:00-03:00').getTime();
+
+      function updateTimer() {
+        const now = new Date().getTime();
+        const diff = targetDate - now;
+
+        if (diff <= 0) {
+          document.getElementById('cd-days').textContent = '00';
+          document.getElementById('cd-hours').textContent = '00';
+          document.getElementById('cd-minutes').textContent = '00';
+          document.getElementById('cd-seconds').textContent = '00';
+          return;
+        }
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        document.getElementById('cd-days').textContent = String(days).padStart(2, '0');
+        document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
+        document.getElementById('cd-minutes').textContent = String(minutes).padStart(2, '0');
+        document.getElementById('cd-seconds').textContent = String(seconds).padStart(2, '0');
+      }
+
+      updateTimer();
+      countdownInterval = setInterval(updateTimer, 1000);
+    }
+
+    // -----------------------------------------------------------------------
+    // 5. EFECTO HOLOGRÁFICO 3D INTERACTIVO EN LOS TICKETS (Mouse + Touch)
+    // -----------------------------------------------------------------------
+    document.querySelectorAll('[data-tilt]').forEach(card => {
+      const glare = card.querySelector('.ticket-glare');
+
+      function applyTilt(clientX, clientY) {
+        const rect = card.getBoundingClientRect();
+        const x = clientX - rect.left;
+        const y = clientY - rect.top;
+
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+
+        const rotateX = ((y - centerY) / centerY) * -6;
+        const rotateY = ((x - centerX) / centerX) * 6;
+
+        card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+
+        if (glare) {
+          const pctX = (x / rect.width) * 100;
+          const pctY = (y / rect.height) * 100;
+          glare.style.setProperty('--glare-x', `${pctX}%`);
+          glare.style.setProperty('--glare-y', `${pctY}%`);
+          glare.style.setProperty('--glare-opacity', '1');
+        }
+      }
+
+      function resetTilt() {
+        card.style.transform = 'rotateX(0deg) rotateY(0deg)';
+        if (glare) {
+          glare.style.setProperty('--glare-opacity', '0');
+        }
+      }
+
+      card.addEventListener('mousemove', e => applyTilt(e.clientX, e.clientY));
+      card.addEventListener('mouseleave', resetTilt);
+
+      card.addEventListener('touchmove', e => {
+        if (e.touches.length > 0) {
+          applyTilt(e.touches[0].clientX, e.touches[0].clientY);
+        }
+      }, { passive: true });
+      card.addEventListener('touchend', resetTilt);
+    });
+
+    // -----------------------------------------------------------------------
+    // 6. CHISPAS DORADAS / CONFETI CÁLIDO EN CANVAS
+    // -----------------------------------------------------------------------
+    function launchConfetti() {
+      const canvas = document.getElementById('confetti-canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const colors = ['#fde047', '#f59e0b', '#fb923c', '#fef08a', '#ffffff', '#ff5a00'];
+      const particles = [];
+
+      for (let i = 0; i < 110; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height - canvas.height,
+          r: Math.random() * 5 + 2.5,
+          d: Math.random() * 110,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          tilt: Math.floor(Math.random() * 10) - 10,
+          tiltAngleIncremental: Math.random() * 0.07 + 0.04,
+          tiltAngle: 0,
+          speedY: Math.random() * 2.5 + 1.8
+        });
+      }
+
+      let animationFrameId;
+      let startTime = Date.now();
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        particles.forEach((p) => {
+          ctx.beginPath();
+          ctx.lineWidth = p.r;
+          ctx.strokeStyle = p.color;
+          ctx.moveTo(p.x + p.tilt + p.r / 2, p.y);
+          ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r / 2);
+          ctx.stroke();
+
+          p.tiltAngle += p.tiltAngleIncremental;
+          p.y += p.speedY;
+          p.tilt = Math.sin(p.tiltAngle) * 12;
+        });
+
+        if (Date.now() - startTime < 4500) {
+          animationFrameId = requestAnimationFrame(draw);
+        } else {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          cancelAnimationFrame(animationFrameId);
+        }
+      }
+
+      draw();
+    }
+
+    window.addEventListener('resize', () => {
+      const canvas = document.getElementById('confetti-canvas');
+      if (canvas) {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+    });
+  </script>
+</body>
+</html>
